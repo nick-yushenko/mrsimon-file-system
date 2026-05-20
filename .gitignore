@@ -4,6 +4,8 @@ build
 coverage
 .vite
 
+agent_docs 
+
 .DS_Store
 .env
 .env.local
