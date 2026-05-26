@@ -12,27 +12,36 @@ datasource db {
   provider = "postgresql"
 }
 
-enum FileSystemNodeType {
+enum UploadStatus {
+  PENDING
+  UPLOADED
+}
+
+enum NodeType {
   FILE
   FOLDER
 }
 
-model FileSystemNode {
-  id   String @id @default(uuid())
-  name String
-  type FileSystemNodeType
+model Node {
+  id     String       @id @default(uuid())
+  status UploadStatus
+  name   String
+  type   NodeType
 
   parentId String?
 
-  parent   FileSystemNode?  @relation("NodeHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
-  children FileSystemNode[] @relation("NodeHierarchy")
+  parent   Node?  @relation("NodeHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  children Node[] @relation("NodeHierarchy")
 
   storageKey String?
   mimeType   String?
   size       Int?
 
+  uploadExpiresAt DateTime?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([parentId])
+	@@index([status, uploadExpiresAt])
 }

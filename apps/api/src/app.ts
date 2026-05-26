@@ -1,26 +1,21 @@
+import type { FastifyServerOptions } from "fastify";
+
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 
 import { filesRoutes } from "./modules/files/files.routes.js";
 
-export async function buildApp() {
-  const app = Fastify({
-    logger: true,
-  });
+export type AppOptions = Partial<FastifyServerOptions>;
 
-  await app.register(cors, {
+async function buildApp(options: AppOptions = {}) {
+  const fastify = Fastify(options);
+
+  await fastify.register(cors, {
     origin: true,
   });
 
-  app.get("/health", async () => {
-    return {
-      status: "ok",
-    };
-  });
-
-  await app.register(filesRoutes, {
-    prefix: "/api/files",
-  });
-
-  return app;
+  fastify.register(filesRoutes, { prefix: "/api/fm" });
+  return fastify;
 }
+
+export { buildApp };

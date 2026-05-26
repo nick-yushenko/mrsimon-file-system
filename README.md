@@ -205,3 +205,15 @@ moduleResolution: NodeNext
 - backend работает как ESM-приложение
 - локальные импорты требуют `.js` расширения
 
+
+# Prisma Studio 
+
+```bash
+pnpm --filter api exec prisma studio
+```
+
+# Migrations 
+
+```bash
+pnpm --filter api exec prisma migrate dev --name migration_name
+```

@@ -1,15 +1,25 @@
-import { buildApp } from "./app.js";
+import "dotenv/config";
 
-const app = await buildApp();
+import { buildApp, type AppOptions } from "./app.js";
+import { startCleanupPendingUploadsJob } from "./jobs/cleanupPendingUploads.js";
 
-try {
-  await app.listen({
-    port: 4000,
-    host: "0.0.0.0",
-  });
+const options: AppOptions = {
+  logger: true,
+};
 
-  app.log.info("API started on http://localhost:4000");
-} catch (error) {
-  app.log.error(error);
-  process.exit(1);
-}
+const start = async () => {
+  const app = await buildApp(options);
+  startCleanupPendingUploadsJob();
+
+  try {
+    await app.listen({
+      port: 3001,
+      host: "localhost",
+    });
+  } catch (err) {
+    app.log.error(err);
+    process.exit(1);
+  }
+};
+
+start();

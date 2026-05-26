@@ -1,56 +1,31 @@
-import "./App.css";
+import Stack from "@mui/material/Stack";
+import CssBaseline from "@mui/material/CssBaseline";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import { useState, useEffect } from "react";
+import { FileManager } from "@/widgets/fm";
 
-type FileSystemItem = {
-  id: string;
-  name: string;
-  type: "file" | "folder";
-};
-
-type FilesResponse = {
-  items: FileSystemItem[];
-};
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5_000,
+      gcTime: 5 * 60 * 1000,
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+    mutations: {
+      retry: 0,
+    },
+  },
+});
 
 function App() {
-  const [items, setItems] = useState<FileSystemItem[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    async function loadFiles() {
-      try {
-        const response = await fetch("http://localhost:4000/api/files");
-
-        if (!response.ok) {
-          throw new Error("Failed to load files");
-        }
-
-        const data = (await response.json()) as FilesResponse;
-        setItems(data.items);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    void loadFiles();
-  }, []);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return (
-    <main>
-      <h1>File System</h1>
-
-      <ul>
-        {items.map((item) => (
-          <li key={item.id}>
-            {item.type === "folder" ? "📁" : "📄"} {item.name}
-          </li>
-        ))}
-      </ul>
-    </main>
+    <QueryClientProvider client={queryClient}>
+      <CssBaseline enableColorScheme />
+      <Stack component="main" sx={{ mx: "auto", my: 3, maxWidth: 1200, width: "90%" }}>
+        <FileManager />
+      </Stack>
+    </QueryClientProvider>
   );
 }
 

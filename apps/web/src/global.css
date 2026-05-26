@@ -1,0 +1,40 @@
+html {
+	height: 100%;
+}
+
+html,
+body,
+#root {
+	max-width: 100vw;
+	min-height: 100vh;
+
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+* {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+	-webkit-box-shadow: 0 0 0 30px white inset !important;
+	/* Белый фон */
+	-webkit-text-fill-color: #333 !important;
+	/* Цвет текста */
+	box-shadow: 0 0 0 30px white inset !important;
+}

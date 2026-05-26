@@ -9,6 +9,7 @@ This is a monorepo project with:
 
 ## General rules
 
+- Do not change files unless asked
 - Keep changes minimal and focused on the requested task.
 - Do not rewrite unrelated code.
 - Follow the existing project structure and naming conventions.

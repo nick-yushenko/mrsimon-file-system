@@ -13,3 +13,4 @@ agent_docs
 *.tsbuildinfo
 
 
+apps/api/src/generated/
