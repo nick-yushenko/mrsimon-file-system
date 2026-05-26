@@ -68,7 +68,7 @@
 - обработка медиа
 - хранение учебных материалов
 
-----------
+---
 
 Проект использует monorepo-структуру на базе `pnpm workspaces`.
 
@@ -112,7 +112,6 @@ mrsimon-file-system/
 
 ---
 
-
 # Установка зависимостей
 
 ## Установка всех зависимостей
@@ -143,30 +142,64 @@ pnpm --filter web add package-name
 
 ---
 
-
-# Запуск проекта
+# Первый запуск проекта
 
 Из корня:
+
+## Настройка переменных окружения
+
+В `apps/api/.env`
+
+```env
+DATABASE_URL="postgresql://mrsimon:mrsimon_password@127.0.0.1:5432/mrsimon_file_system"
+```
+
+На Windows с Docker Desktop лучше использовать `127.0.0.1`, а не `localhost`, чтобы избежать проблем с IPv6.
+
+## Запуск БД
+
+```bash
+docker compose up -d db
+```
+
+## Применение схемы БД
+
+Для первого локального запуска:
+
+```bash
+pnpm --filter api exec prisma migrate dev --name init
+```
+
+## Генерация prisma
+
+```bash
+pnpm --filter api exec prisma generate
+```
+
+## Запуск дев-сервера
 
 ```bash
 pnpm dev
 ```
+
 ```bash
 pnpm dev:api
 ```
+
 ```bash
 pnpm dev:web
 ```
-
 
 # Сборка
 
 ```bash
 pnpm build
 ```
+
 ```bash
 pnpm --filter api build
 ```
+
 ```bash
 pnpm --filter web build
 ```
@@ -189,8 +222,6 @@ eslint.config.mjs
 
 ---
 
-
-
 # Backend TypeScript
 
 Backend использует:
@@ -205,14 +236,13 @@ moduleResolution: NodeNext
 - backend работает как ESM-приложение
 - локальные импорты требуют `.js` расширения
 
-
-# Prisma Studio 
+# Prisma Studio
 
 ```bash
 pnpm --filter api exec prisma studio
 ```
 
-# Migrations 
+# Migrations
 
 ```bash
 pnpm --filter api exec prisma migrate dev --name migration_name

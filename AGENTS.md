@@ -20,7 +20,6 @@ This is a monorepo project with:
 - Prefer explicit and straightforward code over highly generic or "clever" solutions.
 - Do not over-engineer solutions. This project prefers pragmatic and maintainable code over theoretical scalability.
 
-
 ## Response style
 
 - Answer in Russian.
@@ -52,3 +51,4 @@ Run only targeted verification commands when relevant:
 ```bash
 pnpm lint
 pnpm format:check
+```
