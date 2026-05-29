@@ -4,9 +4,9 @@ import { fmApi } from "@/entities/fm/api/fmApi";
 
 import { fmNodesQueryKeys } from "./queryKeys";
 
-export const useFmQuery = () => {
+export const useFmQuery = (parentId: string | null) => {
   return useQuery({
-    queryKey: fmNodesQueryKeys.all,
-    queryFn: () => fmApi.getNodes(),
+    queryKey: fmNodesQueryKeys.list(parentId),
+    queryFn: () => fmApi.getNodes({ parentId }),
   });
 };

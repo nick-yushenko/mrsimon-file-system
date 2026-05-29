@@ -1,7 +1,11 @@
-import type { NodeDto } from "./types";
+import type { NodeDto, BreadcrumbDto } from "./types";
 
 export type GetFmNodesParam = {
   accessToken: string | null;
+};
+
+export type GetNodesRequest = {
+  parentId?: string | null;
 };
 
 export type CreateFolderRequest = {
@@ -18,13 +22,24 @@ export type CreateUploadUrlRequest = {
   parentId?: string | null;
 };
 
-export type CreateNodeRequest = CreateFolderRequest | CreateUploadUrlRequest;
-
 export type CreateUploadUrlResponse = {
   node: NodeDto;
   uploadUrl: string;
+  renamed: boolean;
+  originalName?: string;
+};
+
+export type CreateNodeRequest = CreateFolderRequest | CreateUploadUrlRequest;
+
+export type CreateNodeResponse = {
+  node: NodeDto;
+  renamed: boolean;
+  originalName?: string;
 };
 
 export type CompleteUploadResponse = NodeDto;
 
-export type GetNodesResponse = NodeDto[];
+export type GetNodesResponse = {
+  nodes: NodeDto[];
+  breadcrumbs: BreadcrumbDto[];
+};

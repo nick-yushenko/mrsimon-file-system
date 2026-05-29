@@ -27,3 +27,8 @@ export type FolderNodeDto = {
 };
 
 export type NodeDto = FileNodeDto | FolderNodeDto;
+
+export type BreadcrumbDto = {
+  id: string | null;
+  name: string;
+};

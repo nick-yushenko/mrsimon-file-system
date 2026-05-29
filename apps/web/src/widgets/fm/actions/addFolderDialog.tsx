@@ -1,31 +1,30 @@
+import type { CreateFolderRequest } from "@mrsimon/shared";
+
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import { useForm } from "react-hook-form";
 import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+
 import { useFmActions } from "@/entities/fm/models/actions";
 
 type TProps = {
   open: boolean;
   onClose: () => void;
+  parentId: string | null;
 };
 
-export type CreateFolderRequest = {
-  name: string;
-  type: "FOLDER";
-  parentId?: string | null;
-};
+const formId = "add-folder-form";
 
-export const AddFolderDialog = ({ open, onClose }: TProps) => {
-  const formId = "add-folder-form";
-
+export const AddFolderDialog = ({ open, onClose, parentId }: TProps) => {
   const {
     register,
+    reset,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<CreateFolderRequest>({
     defaultValues: {
@@ -35,11 +34,20 @@ export const AddFolderDialog = ({ open, onClose }: TProps) => {
     },
   });
 
-  const { createFolder, isCreating, creatingError } = useFmActions();
+  const { createFolder, isCreating, creatingError } = useFmActions(parentId);
 
-  const onSubmit = (data: CreateFolderRequest) => {
-    createFolder(data);
-    console.log(data);
+  const onSubmit = async (data: CreateFolderRequest) => {
+    const res = await createFolder({
+      ...data,
+      parentId,
+    });
+
+    if (res.renamed) {
+      alert(`Папка "${res.originalName}" уже существует. Новое имя: "${res.node.name}"`);
+    }
+
+    reset();
+    onClose();
   };
 
   return (
@@ -47,6 +55,8 @@ export const AddFolderDialog = ({ open, onClose }: TProps) => {
       <DialogTitle>Создать папку</DialogTitle>
 
       <DialogContent>
+        {creatingError?.message && <Typography color="error">{creatingError.message}</Typography>}
+
         <Box component="form" onSubmit={handleSubmit(onSubmit)} id={formId} sx={{ py: 1 }}>
           <TextField
             fullWidth

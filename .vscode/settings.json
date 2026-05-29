@@ -1,3 +1,23 @@
 {
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+
+  "typescript.suggest.autoImports": true,
+  "javascript.suggest.autoImports": true,
+
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/dist": true,
+    "**/.turbo": true
+  },
+
+  "files.watcherExclude": {
+    "**/.next/**": true,
+    "**/.turbo/**": true,
+    "**/dist/**": true
+  }
 }

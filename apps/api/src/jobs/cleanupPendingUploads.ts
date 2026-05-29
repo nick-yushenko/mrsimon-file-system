@@ -5,7 +5,7 @@ import { s3 } from "../shared/storage/s3.js";
 import { prisma } from "../shared/db/prisma.js";
 
 export function startCleanupPendingUploadsJob() {
-  cron.schedule("2 * * * *", async () => {
+  cron.schedule("26 * * * *", async () => {
     console.log("---- CRON RUNING ----");
     const expiredNodes = await prisma.node.findMany({
       where: {
@@ -30,6 +30,7 @@ export function startCleanupPendingUploadsJob() {
       take: 100,
     });
 
+    console.log(expiredNodes);
     for (const node of expiredNodes) {
       console.log(`[cleanup] found ${expiredNodes.length} expired uploads`);
       try {

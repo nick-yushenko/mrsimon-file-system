@@ -4,26 +4,37 @@ import { fmApi } from "@/entities/fm/api/fmApi";
 
 import { fmNodesQueryKeys } from "./queryKeys";
 
-export const useFmActions = () => {
+export const useFmActions = (parentId: string | null) => {
   const queryClient = useQueryClient();
 
   const invalidate = {
-    all: () =>
+    list: () =>
       queryClient.invalidateQueries({
-        queryKey: fmNodesQueryKeys.all,
+        queryKey: fmNodesQueryKeys.list(parentId),
       }),
   } as const;
 
   const createFolder = useMutation({
     mutationFn: fmApi.createFolder,
-    onSuccess: invalidate.all,
+    onSuccess: invalidate.list,
+  });
+
+  const createUploadUrl = useMutation({
+    mutationFn: fmApi.createUploadUrl,
+  });
+
+  const completeUpload = useMutation({
+    mutationFn: fmApi.completeUpload,
+    onSuccess: invalidate.list,
   });
 
   return {
     createFolder: createFolder.mutateAsync,
+    createUploadUrl: createUploadUrl.mutateAsync,
+    completeUpload: completeUpload.mutateAsync,
 
-    isCreating: createFolder.isPending,
+    isCreating: createFolder.isPending || createUploadUrl.isPending || completeUpload.isPending,
 
-    creatingError: createFolder.error,
+    creatingError: createFolder.error || createUploadUrl.error || completeUpload.error,
   };
 };
